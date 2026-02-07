@@ -48,13 +48,51 @@ composer require betterone/betterone
 
 The components require **Alpine.js** and **Tailwind CSS**.
 
+#### Tailwind CSS (via npm)
+
+1. Install Tailwind CSS (if not already installed):
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+2. Configure `tailwind.config.js` to scan the package's views:
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
+        // Add this line to scan Betterone components:
+        "./vendor/betterone/betterone/resources/views/**/*.blade.php",
+    ],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+}
+```
+
+3. Add Tailwind directives to your `resources/css/app.css`:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+#### Alpine.js
+
 Add Alpine.js to your layout (e.g., `resources/views/layouts/app.blade.php`):
 
 ```html
 <head>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- ... -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <!-- Alpine.js + Collapse Plugin -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
