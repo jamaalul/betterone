@@ -1,0 +1,110 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Illuminate\Support\Str;
+
+if ($argc < 2) {
+    echo "Usage: composer make-component <ComponentName>\n";
+    exit(1);
+}
+
+$name = $argv[1];
+$className = Str::studly($name);
+$viewName = Str::kebab($name);
+
+$baseDir = __DIR__ . '/..';
+$classPath = "$baseDir/src/Components/$className.php";
+$viewPath = "$baseDir/resources/views/components/$viewName.blade.php";
+
+if (file_exists($classPath) || file_exists($viewPath)) {
+    echo "Component already exists!\n";
+    exit(1);
+}
+
+// PHP Class Template
+$phpContent = <<<PHP
+<?php
+
+namespace Betterone\Betterone\Components;
+
+use Illuminate\Contracts\View\View;
+
+class $className extends BetterComponent
+{
+    /**
+     * Create a new component instance.
+     */
+    public function __construct(
+        public string \$variant = 'primary',
+        public string \$size = 'md',
+    ) {}
+
+    /**
+     * Get the variant classes.
+     */
+    public function variantClasses(): string
+    {
+        return match (\$this->variant) {
+            'primary' => 'bg-blue-600 text-white',
+            'secondary' => 'bg-gray-600 text-white',
+            default => 'bg-blue-600 text-white',
+        };
+    }
+
+    /**
+     * Get the size classes.
+     */
+    public function sizeClasses(): string
+    {
+        return match (\$this->size) {
+            'sm' => 'px-3 py-1.5 text-sm',
+            'md' => 'px-4 py-2 text-base',
+            'lg' => 'px-5 py-2.5 text-lg',
+            default => 'px-4 py-2 text-base',
+        };
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render(): View
+    {
+        return view('better::components.$viewName');
+    }
+}
+PHP;
+
+// Blade View Template
+$bladeContent = <<<BLADE
+@props(['variant' => 'primary', 'size' => 'md'])
+
+{{-- Safelist for variant classes --}}
+{{-- bg-blue-600 text-white bg-gray-600 text-white --}}
+
+{{-- Safelist for size classes --}}
+{{-- px-3 py-1.5 text-sm px-4 py-2 text-base px-5 py-2.5 text-lg --}}
+
+<div {{ \$attributes->merge([
+    'class' => \$tw(
+        'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2',
+        \$variantClasses(),
+        \$sizeClasses(),
+        \$attributes->get('class', '')
+    )
+]) }}>
+    {{ \$slot }}
+</div>
+BLADE;
+
+file_put_contents($classPath, $phpContent);
+echo "Created: src/Components/$className.php\n";
+
+file_put_contents($viewPath, $bladeContent);
+echo "Created: resources/views/components/$viewName.blade.php\n";
+
+echo "\nComponent $className created successfully.\n";
+echo "Don't forget to register it in BetteroneServiceProvider.php!\n";
+PHP;
+

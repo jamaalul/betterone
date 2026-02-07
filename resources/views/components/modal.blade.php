@@ -5,6 +5,9 @@
     x-on:keydown.escape.window="open = false"
     {{ $attributes }}
 >
+    {{-- Safelist for size classes --}}
+    {{-- max-w-sm max-w-md max-w-lg max-w-xl max-w-2xl max-w-full mx-4 --}}
+
     {{-- Trigger slot --}}
     @if(isset($trigger))
         <div @click="open = true">

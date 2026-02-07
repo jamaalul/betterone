@@ -42,6 +42,11 @@ class BetteroneServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views' => resource_path('views/vendor/better'),
         ], 'betterone-views');
 
+        // Publish CSS
+        $this->publishes([
+            __DIR__ . '/../resources/css' => public_path('vendor/betterone/css'),
+        ], 'betterone-css');
+
         // Share $tw helper with all better components
         \Illuminate\Support\Facades\View::composer('better::*', function ($view) {
             $view->with('tw', function (...$classes) {

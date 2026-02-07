@@ -38,9 +38,9 @@ class Badge extends BetterComponent
         return match ($this->size) {
             'xs' => 'px-1.5 py-0.5 text-xs',
             'sm' => 'px-2 py-0.5 text-xs',
-            'md' => 'px-2.5 py-1 text-sm',
+            'md' => 'px-2 py-1 text-sm',
             'lg' => 'px-3 py-1.5 text-sm',
-            default => 'px-2.5 py-1 text-sm',
+            default => 'px-2 py-1 text-sm',
         };
     }
 
