@@ -11,6 +11,7 @@ class Separator extends BetterComponent
      */
     public function __construct(
         public string $orientation = 'horizontal',
+        public ?string $color = null,
     ) {}
 
     /**

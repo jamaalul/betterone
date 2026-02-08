@@ -19,7 +19,7 @@ $classPath = "$baseDir/src/Components/$className.php";
 $viewPath = "$baseDir/resources/views/components/$viewName.blade.php";
 
 if (file_exists($classPath) || file_exists($viewPath)) {
-    echo "Component already exists!\n";
+    echo "\nComponent already exists!\n";
     exit(1);
 }
 
@@ -99,12 +99,11 @@ $bladeContent = <<<BLADE
 BLADE;
 
 file_put_contents($classPath, $phpContent);
-echo "Created: src/Components/$className.php\n";
+echo "\nCreated: src/Components/$className.php\n";
 
 file_put_contents($viewPath, $bladeContent);
 echo "Created: resources/views/components/$viewName.blade.php\n";
 
 echo "\nComponent $className created successfully.\n";
 echo "Don't forget to register it in BetteroneServiceProvider.php!\n";
-PHP;
 

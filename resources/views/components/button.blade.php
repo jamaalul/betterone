@@ -19,5 +19,8 @@
     ]) }}
     @disabled($disabled)
 >
+    @if($icon)
+        <x-better::icon :icon="$icon" :size="$size" class="mr-2 -ml-1" />
+    @endif
     {{ $slot }}
 </button>

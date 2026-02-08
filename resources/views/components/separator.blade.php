@@ -4,7 +4,7 @@
     {{-- w-full h-px h-full w-px --}}
     {{ $attributes->merge([
         'class' => $tw(
-            'bg-gray-200',
+            $color ? "bg-{$resolveColor($color)}-500" : 'bg-gray-200',
             $orientationClasses(),
             $attributes->get('class', '')
         ),

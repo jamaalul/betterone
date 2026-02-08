@@ -9,6 +9,8 @@ class Button extends BetterComponent
     public string $variant;
     public string $size;
     public string $type;
+    public ?string $icon;
+    public ?string $color;
 
     /**
      * Create a new component instance.
@@ -18,10 +20,14 @@ class Button extends BetterComponent
         string $variant = null,
         string $size = null,
         string $type = 'button',
+        string $icon = null,
+        string $color = null,
     ) {
         $this->variant = $variant ?? $this->config('button.default_variant', 'primary');
         $this->size = $size ?? $this->config('button.default_size', 'md');
         $this->type = $type;
+        $this->icon = $icon;
+        $this->color = $color;
     }
 
     /**
@@ -29,13 +35,17 @@ class Button extends BetterComponent
      */
     public function variantClasses(): string
     {
+        $colors = $this->colorClasses($this->color);
+        $base = $colors['base'];
+        $contrast = $colors['contrast'];
+
         return match ($this->variant) {
-            'primary' => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+            'primary' => "{$colors['bg']} {$contrast} {$colors['hover']} {$colors['ring']}",
             'secondary' => 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-            'outline' => 'border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500',
-            'ghost' => 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+            'outline' => "border border-{$base}-300 text-{$base}-700 hover:bg-{$base}-50 {$colors['ring']}",
+            'ghost' => "text-{$base}-700 hover:bg-{$base}-100 {$colors['ring']}",
             'destructive' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-            default => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+            default => "{$colors['bg']} {$contrast} {$colors['hover']} {$colors['ring']}",
         };
     }
 
